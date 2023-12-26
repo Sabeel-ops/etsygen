@@ -31,7 +31,7 @@ async function generateText() {
 
     const prompts = [
       "Generate an SEO optimized Etsy title for this product that will rank well on Etsy",
-      "Generate relevant tags for this product on Etsy",
+      "Generate 20 SEO optimized Etsy tags separated by commas for this product that will rank well on Etsy. Do not enclose them in quotes",
     ];
 
     const imageInput = document.getElementById("imageInput");
