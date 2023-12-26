@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generative AI Image to Text</title>
+  <style>
+    #generateButton:disabled {
+        background-color: #ddd; /* Change the background color to a light gray */
+        color: #666; /* Change the text color to a darker gray */
+        cursor: not-allowed; /* Change the cursor to indicate non-interactivity */
+      }
+    body, h1, p, input, button {
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+    .newbody {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+       
+        min-height: 100vh;
+        margin: 0;
+      }
+    /* Result container styling */
+    #resultContainer1 {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #resultContainer2 {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Add this CSS to your existing styles.css */
+    .uploadOuter {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .uploadOuter strong {
+      padding: 0 10px;
+    }
+
+    .dragBox {
+      width: 250px;
+      height: 100px;
+      margin: 0 auto;
+      position: relative;
+      text-align: center;
+      font-weight: bold;
+      line-height: 95px;
+      color: #999;
+      border: 2px dashed #ccc;
+      display: inline-block;
+      transition: transform 0.3s;
+    }
+
+    .dragBox input[type="file"] {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      opacity: 0;
+      top: 0;
+      left: 0;
+    }
+
+    .draging {
+      transform: scale(1.1);
+    }
+
+    #preview {
+      text-align: center;
+      max-width: 200px; /* Adjust the maximum width as needed */
+      margin-top: 20px; /* Add some spacing between the upload section and the preview */
+    }
+
+    #preview img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* Footer styling */
+    footer {
+      margin-top: 20px;
+      background-color: #333;
+      color: #fff;
+      padding: 10px 0;
+      text-align: center;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .container2 {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      text-align: center;
+    }
+
+    .uploadOuter {
+      margin-right: 20px; /* Optional: Add some spacing between the upload section and the preview */
+      display: flex;
+      flex-direction: column;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #preview {
+        max-width: 200px; /* Adjust the maximum width as needed */
+        margin-top: 20px; /* Add some spacing between the upload section and the preview */
+      }
+      
+      #preview img {
+        max-width: 100%;
+        height: auto;
+      }
+    #copyButton {
+      color: white;
+      padding: 10px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+
+    #copyButton {
+      color: white;
+      padding: 5px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      margin-top: 5px;
+      display: flex;
+      align-items: center;
+    }
+
+    .final {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #resultContainer1 {
+      width: 300px;
+    }
+
+    #resultContainer2 {
+      width: 300px;
+    }
+
+    #copyButton img {
+      width: 16px; /* Adjust the size as needed */
+      height: 16px; /* Adjust the size as needed */
+      margin-right: 5px;
+    }
+
+    #generateButton {
+      background-color: #f26722;
+      color: #fff;
+      padding: 10px;
+      cursor: pointer;
+      border: none;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    #generateButton:hover {
+      background-color: #e45f1b;
+    }
+
+    .container {
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .container2 {
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+    #resultContainer1 {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      
+      #resultContainer2 {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+    /* Header styling */
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 10px 0;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 20px;
+      }
+
+      header h1 {
+        font-size: 24px;
+      }
+    }
+  </style>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "@google/generative-ai": "https://esm.run/@google/generative-ai"
+      }
+    }
+  </script>
+  <script>
+    // Function to handle file selection
+function handleFileSelect(event) {
+    event.preventDefault();
+    const file = event.target.files[0];
+    if (file) {
+      previewImage(file);
+    }
+  }
+  
+  // Function to handle drag over
+  function drag() {
+    document.getElementById('uploadFile').parentNode.className = 'draging dragBox';
+}
+function drop() {
+    document.getElementById('uploadFile').parentNode.className = 'dragBox';
+}
+  
+  // Function to preview the selected image
+  function previewImage(file) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const preview = document.getElementById('preview');
+      preview.innerHTML = `<img src="${e.target.result}" alt="Preview" style="max-width: 100%; max-height: 100%;">`;
+    };
+    reader.readAsDataURL(file);
+  }
+  function copyResult() {
+    const resultContainer1 = document.getElementById('resultContainer1');
+    const resultText = resultContainer1.innerText;
+  
+    // Create a textarea element to temporarily hold the text
+    const textarea = document.createElement('textarea');
+    textarea.value = resultText;
+  
+    // Append the textarea to the document
+    document.body.appendChild(textarea);
+  
+    // Select and copy the text from the textarea
+    textarea.select();
+    document.execCommand('copy');
+  
+    // Remove the textarea from the document
+    document.body.removeChild(textarea);
+  
+    // Provide some feedback, e.g., alert or console.log
+    alert('Result copied to clipboard!');
+  }
+  
+  function copyResult2() {
+    const resultContainer2 = document.getElementById('resultContainer2');
+    const resultText = resultContainer2.innerText;
+  
+    // Create a textarea element to temporarily hold the text
+    const textarea = document.createElement('textarea');
+    textarea.value = resultText;
+  
+    // Append the textarea to the document
+    document.body.appendChild(textarea);
+  
+    // Select and copy the text from the textarea
+    textarea.select();
+    document.execCommand('copy');
+  
+    // Remove the textarea from the document
+    document.body.removeChild(textarea);
+  
+    // Provide some feedback, e.g., alert or console.log
+    alert('Result copied to clipboard!');
+  }
+  </script>
+  
+</head>
+<body>
+    <header>
+        <div class="container">
+          <h1 class="tite">Etsy Titles & Tags Generator</h1>
+        </div>
+      </header>
+      <div class="newbody">
+        <div class="container2">
+            <div class="uploadOuter">
+                <label for="imageInput" class="btn btn-primary">Upload Image</label>
+                <strong>OR</strong>
+                <span class="dragBox"  >
+                    Drag and Drop image here
+                    <input type="file" onchange="handleFileSelect(event)" id="imageInput" ondragover="drag()" ondrop="drop()"/>
+                </span>
+                <button type="button" id="generateButton" onclick="generateText()">Generate Content</button>
+            </div>
+            <div id="preview"></div>
+        </div>
+        <div>
+        <div class="final">
+            <p>Title:</p>
+            <div id="resultContainer1"></div>
+            <button id="copyButton" onclick="copyResult()">
+              <img src="copy-icon.svg" alt="Copy Icon">
+            </button>
+          </div>
+        
+        
+          <div class="final">
+            <p>Tags:</p>
+            <div id="resultContainer2"></div>
+            <button id="copyButton" onclick="copyResult2()">
+              <img src="copy-icon.svg" alt="Copy Icon">
+            </button>
+          </div>
+        </div>
+      </div>
+<script type="module" src="script.js"></script>
+
+</body>
+</html>
