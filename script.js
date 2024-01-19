@@ -29,10 +29,15 @@ async function generateText() {
 
     const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
 
+    const nicheInput = document.getElementById("nicheInput").value;
+
+    // Check if nicheInput is empty, if so, use an empty string as the niche value
+    const nichePrompt = nicheInput ? `Niche: ${nicheInput}` : "The neiche is: ";
+
     const prompts = [
-      "Generate an SEO optimized Etsy title for this product that will rank well on Etsy",
-      "Generate 20 SEO optimized Etsy tags separated by commas for this product that will rank well on Etsy. Do not enclose them in quotes",
-    ];
+      `Generate an SEO optimized Etsy title for this product that will rank well on Etsy ${nichePrompt}`,
+      `Generate 20 SEO optimized Etsy tags separated by commas for this product that will rank well on Etsy. Do not enclose them in quotes ${nichePrompt}`,
+  ];
 
     const imageInput = document.getElementById("imageInput");
 
