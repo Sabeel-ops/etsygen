@@ -221,6 +221,13 @@
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       }
+      #resultContainerSKU {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
     /* Header styling */
     header {
       background-color: #333;
@@ -248,12 +255,22 @@
   </script>
   <script>
     // Function to handle file selection
-function handleFileSelect(event) {
-    event.preventDefault();
-    const file = event.target.files[0];
-    if (file) {
-      previewImage(file);
-    }
+    function handleFileSelect(event) {
+      event.preventDefault();
+      const fileInput = document.getElementById('imageInput');
+      const file = fileInput.files[0];
+  
+      if (file) {
+          // Display the file name in resultContainerSKU
+          const shortenedFileName = file.name.substring(0, file.name.length - 5);
+
+        // Display the shortened file name in resultContainerSKU
+        const resultContainerSKU = document.getElementById('resultContainerSKU');
+        resultContainerSKU.innerText = `${shortenedFileName}`;
+
+        // Preview the image
+        previewImage(file);
+      }
   }
   
   // Function to handle drag over
@@ -316,6 +333,27 @@ function drop() {
     // Provide some feedback, e.g., alert or console.log
     alert('Result copied to clipboard!');
   }
+  function copyResultSKU() {
+    const resultContainerSKU = document.getElementById('resultContainerSKU');
+    const resultText = resultContainerSKU.innerText;
+  
+    // Create a textarea element to temporarily hold the text
+    const textarea = document.createElement('textarea');
+    textarea.value = resultText;
+  
+    // Append the textarea to the document
+    document.body.appendChild(textarea);
+  
+    // Select and copy the text from the textarea
+    textarea.select();
+    document.execCommand('copy');
+  
+    // Remove the textarea from the document
+    document.body.removeChild(textarea);
+  
+    // Provide some feedback, e.g., alert or console.log
+    alert('Result copied to clipboard!');
+  }
   </script>
   
 </head>
@@ -357,6 +395,16 @@ function drop() {
               <img src="copy-icon.svg" alt="Copy Icon">
             </button>
           </div>
+
+
+          <div class="final">
+            <p>SKU:</p>
+            <div id="resultContainerSKU"></div>
+            <button id="copyButton" onclick="copyResultSKU()">
+              <img src="copy-icon.svg" alt="Copy Icon">
+            </button>
+          </div>
+          
         </div>
       </div>
 <script type="module" src="script.js"></script>
