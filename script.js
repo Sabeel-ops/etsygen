@@ -2,7 +2,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // Replace with your own API key
-const API_KEY = "AIzaSyCoLQnJWSk6zPOsdZ0Hq0jNC6deWR7x8BE";
+const API_KEY = "AIzaSyDPw72tu0Jw_7ybTWndwBJhJJY0MmQy2bQ";
 
 // Create an instance of the Generative AI class
 const genAI = new GoogleGenerativeAI(API_KEY);
@@ -47,7 +47,7 @@ async function generateText() {
   const generateButton = document.getElementById("generateButton");
   generateButton.disabled = true;
 
-  const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
   const nicheInput = document.getElementById("nicheInput").value;
 
